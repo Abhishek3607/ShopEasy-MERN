@@ -6,6 +6,16 @@ connectMongoDatabase();
 const port = process.env.PORT || 3000;
 
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`Server is running on PORT ${port}`);
 });
+
+// To handle promise rejection error => in config.env in backend, if uri of DB_URI is wrong
+// or has any errors, it will display the error message defined in this block
+process.on('unhandledRejection',(err)=>{
+  console.log(`Error: ${err.message}`);
+  console.log(`Server is shutting down due to unhandled promise rejection`);
+  server.close(()=>{
+    process.exit(1)
+  })
+})
