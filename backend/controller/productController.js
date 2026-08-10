@@ -28,15 +28,27 @@ export const getAllProducts =handleAsyncError( async (req,res,next) => {
   
   // Calculate total pages based on filtered count
   const totalPages=Math.ceil(productCount/resultsPerPage)
-  console.log(totalPages);
-  
+  const page = Number(req.query.page) || 1;
 
-  const products = await apiFeatures.query
+  if(page > totalPages && productCount > 0){
+    return next(new HandleError("This page doesn't exists", 404))
+  }
+
+  // Apply pagination
+  apiFeatures.pagination(resultsPerPage);
+  const products = await apiFeatures.query;
+
+  if(!products || products.length===0){
+    return next(new HandleError("No Product Found", 404))
+  }
+
   res.status(200).json({
     success: true,
     products,
     productCount,
-    totalPages
+    resultsPerPage,
+    totalPages,
+    currentPage:page
   });
 });
 
