@@ -43,7 +43,8 @@ const userSchema = new mongoose.Schema(
     resetPasswordToken: String,
     resetPasswordExpire: Date,
   },
-  { timeseries: true },
+  // { timeseries: true },    ----- CHECK THIS -----
+  { timestamps: true }
 );
 
 // Password hashing
