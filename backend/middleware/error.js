@@ -7,7 +7,13 @@ export default (err,req,res,next)=>{
     // Cast Error
     if(err.name==='CastError'){
         const message = `This is invalid resource ${err.path}`;
-        err=new HandleError(message,404)
+        err=new HandleError(message,400)
+    }
+
+    // Duplicate key error
+    if(err.code===11000){
+        const message=`This ${Object.keys(err.keyValue)} already registered. Please Login to continue`;
+        err=new HandleError(message,400)
     }
 
     res.status(err.statusCode).json({
