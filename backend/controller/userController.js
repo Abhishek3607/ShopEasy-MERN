@@ -2,6 +2,7 @@ import handleAsyncError from "../middleware/handleAsyncError.js";
 import User from "../models/userModel.js";
 import HandleError from "../utils/handleError.js";
 import { sendToken } from "../utils/jwtToken.js";
+import { sendEmail } from "../utils/sendEmail.js";
 
 export const registerUser = handleAsyncError(async (req, res, next) => {
   const { name, email, password } = req.body;
@@ -69,12 +70,25 @@ export const requestPasswordReset = handleAsyncError(async (req, res, next) => {
   }
   const resetPasswordURL = `http://localhost/api/v1/reset/${resetToken}`;
   const message = `Use the following link to resset your password: ${resetPasswordURL}. \n\n This link will expire in 30 minutes.\n\n If you didn't request for password reset, please ignore this message`;
-  try{
-
-  } catch(error){
-    user.resetPasswordToken=undefined
-    user.resetPasswordExpire=undefined
-    await user.save({validateBeforeSave:false})
-    return next(new HandleError("Email couldn't be sent. Please try again later", 400));
+  try {
+    // Sent Email
+    await sendEmail({
+      email: user.email,
+      subject: "Password Reset Request",
+      message: message,
+    });
+    res.status(200).json({
+      success:true,
+      message:`Email is sent to ${user.email} successfully.`
+    })
+  } catch (error) {
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+    await user.save({ validateBeforeSave: false });
+    console.log(error);
+    
+    return next(
+      new HandleError("Email couldn't be sent. Please try again later", 400),
+    );
   }
 });
