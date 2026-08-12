@@ -8,11 +8,11 @@ import APIFunctionality from "../utils/apiFunctionality.js";
 // 1️⃣Creating Products
 
 export const createProducts = handleAsyncError(async (req, res, next) => {
-  req.body.user = req.user.id;  
+  req.body.user = req.user.id;
   const product = await Product.create(req.body);
   res.status(201).json({
     success: true,
-    product
+    product,
   });
 });
 
@@ -81,7 +81,7 @@ export const deleteProduct = handleAsyncError(async (req, res, next) => {
   });
 });
 
-// 4️⃣Accessing Single Product
+// 5.Accessing Single Product
 export const getSingleProduct = handleAsyncError(async (req, res, next) => {
   const product = await Product.findById(req.params.id);
   if (!product) {
@@ -93,5 +93,14 @@ export const getSingleProduct = handleAsyncError(async (req, res, next) => {
   res.status(200).json({
     success: true,
     product,
+  });
+});
+
+// 6.Admin - Getting all products
+export const getAdminProducts = handleAsyncError(async (req, res, next) => {
+  const products = await Product.find();
+  res.status(200).json({
+    success: true,
+    products,
   });
 });

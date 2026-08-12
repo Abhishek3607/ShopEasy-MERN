@@ -154,14 +154,35 @@ export const updateProfile = handleAsyncError(async (req, res, next) => {
   const updateUserDetails = {
     name,
     email,
-  }
-  const user=await User.findByIdAndUpdate(req.user.id,updateUserDetails,{
-    new:true,
-    runValidators:true
-  })
+  };
+  const user = await User.findByIdAndUpdate(req.user.id, updateUserDetails, {
+    new: true,
+    runValidators: true,
+  });
+  res.status(200).json({
+    success: true,
+    message: "Profile updated successfully",
+    user,
+  });
+});
+
+// Admin - Getting user info
+export const getUserList = handleAsyncError(async (req, res, next) => {
+  const users = await User.find();
   res.status(200).json({
     success:true,
-    message:"Profile updated successfully",
+    users
+  })
+});
+
+// Admin getting single user info
+export const getSingleUser = handleAsyncError(async (req, res, next) => {
+  const user = await User.findById(req.params.id);
+  if(!user){
+    return next(new HandleError(`User doesn't exist with this id: ${req.params.id}`,400))
+  }
+  res.status(200).json({
+    success:true,
     user
   })
 });
