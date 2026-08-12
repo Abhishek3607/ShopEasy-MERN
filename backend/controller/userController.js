@@ -170,19 +170,56 @@ export const updateProfile = handleAsyncError(async (req, res, next) => {
 export const getUserList = handleAsyncError(async (req, res, next) => {
   const users = await User.find();
   res.status(200).json({
-    success:true,
-    users
-  })
+    success: true,
+    users,
+  });
 });
 
 // Admin getting single user info
 export const getSingleUser = handleAsyncError(async (req, res, next) => {
   const user = await User.findById(req.params.id);
-  if(!user){
-    return next(new HandleError(`User doesn't exist with this id: ${req.params.id}`,400))
+  if (!user) {
+    return next(
+      new HandleError(`User doesn't exist with this id: ${req.params.id}`, 400),
+    );
   }
   res.status(200).json({
-    success:true,
-    user
-  })
+    success: true,
+    user,
+  });
 });
+
+// Admin - changing user role
+export const updateUserRole = handleAsyncError(async (req, res, next) => {
+  const { role } = req.body;
+  const newUserData = {
+    role,
+  };
+  const user = await User.findByIdAndUpdate(req.params.id, newUserData, {
+    new: true,
+    runValidators: true,
+  });
+  if (!user) {
+    return next(new HandleError("User doesn't exist", 400));
+  }
+  // console.log(user);
+
+  res.status(200).json({
+    success: true,
+    user,
+  });
+});
+
+// Admin - Delete User Profile
+export const deleteUser = handleAsyncError(async (req, res, next) => {
+  const user = await User.findById(req.params.id);
+  if (!user) {
+    return next(new HandleError("User doesn't exist", 400));
+  }
+  await User.findByIdAndDelete(req.params.id)
+    res.status(200).json({
+    success: true,
+    message:"User deleted successfully"
+  });
+});
+

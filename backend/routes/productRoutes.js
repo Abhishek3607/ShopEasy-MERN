@@ -1,6 +1,7 @@
 import express from "express";
 import {
   createProducts,
+  createReviewForProduct,
   deleteProduct,
   getAdminProducts,
   getAllProducts,
@@ -25,5 +26,6 @@ router
   .put(verifyUserAuth, roleBasedAccess("admin"), updateProduct)
   .delete(verifyUserAuth, roleBasedAccess("admin"), deleteProduct);
 router.route("/product/:id").get(getSingleProduct);
+router.route("/review").put(verifyUserAuth, createReviewForProduct);
 
 export default router;
