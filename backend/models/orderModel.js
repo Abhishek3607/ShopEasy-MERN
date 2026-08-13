@@ -52,6 +52,11 @@ const orderSchema = new mongoose.Schema({
       },
     },
   ],
+  orderStatus: {
+    type: String,
+    required: true,
+    default:"Processing"
+  },
   user: {
     type: mongoose.Schema.ObjectId,
     ref: "User", // like foreign key
@@ -90,12 +95,13 @@ const orderSchema = new mongoose.Schema({
       default: 0,
       required: true,
     },
-    deliveredAt:Date,
-    createdAt:{
-        type: Date,
+    deliveredAt: Date,
+    createdAt: {
+      type: Date,
       default: Date.now,
-    }
+    },
   },
 });
 
-export default mongoose.model('Order',orderSchema)
+export default mongoose.model("Order", orderSchema);
+
