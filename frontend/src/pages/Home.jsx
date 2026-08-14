@@ -1,6 +1,7 @@
 import Footer from "../components/Footer";
 import ImageSlider from "../components/imageSlider";
 import Navbar from "../components/Navbar";
+import PageTitle from "../components/PageTitle";
 import Product from "../components/Product";
 import "../pageStyles/Home.css";
 
@@ -10,7 +11,7 @@ const products = [
     name: "Product a4",
     description: "Prod description 1",
     price: 800,
-    ratings: 5,
+    ratings: 2,
     image: [
       {
         public_id: "Test id 1",
@@ -78,6 +79,7 @@ const products = [
 const Home = () => {
   return (
     <>
+    <PageTitle title="Home-My Website"/>
       <Navbar />
       <ImageSlider />
       <div className="home-container">
