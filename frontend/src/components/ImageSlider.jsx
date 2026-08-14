@@ -29,12 +29,12 @@ const ImageSlider = () => {
         <div className="slider-dots">
           {images.map((_,index) => (
             <span className={`dot${index===currentIndex?'active':''}`} 
-            onClick={()=>setCurrentIndex(index)}/>
+            onClick={()=>setCurrentIndex(index)} key={index}/>
           ))}
         </div>
         {images.map((image, index) => (
           <div className="slider-item" key={index}>
-            <img src={image} alt={`Slide ${index + 1}`} />
+            <img src={image} alt={`Slide ${index + 1} `} />
           </div>
         ))}
       </div>
